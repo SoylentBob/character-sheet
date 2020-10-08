@@ -7,8 +7,8 @@ Vue.use(VueRouter);
 const routes: RouteConfig[] = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    name: 'Characters',
+    component: () => import('../views/Characters.vue'),
   },
   {
     path: '/about',
