@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
-import Home from '../views/Home.vue';
 
 Vue.use(VueRouter);
 
@@ -11,12 +10,19 @@ const routes: RouteConfig[] = [
     component: () => import('../views/Characters.vue'),
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    path: '/characters',
+    name: 'Characters',
+    component: () => import('../views/Characters.vue'),
+  },
+  {
+    path: '/characters/:id',
+    name: 'Character Sheet',
+    component: () => import('../views/CharacterSheet.vue'),
+  },
+  {
+    path: '/new-character',
+    name: 'Create a new character',
+    component: () => import('../views/CreateCharacter.vue'),
   },
 ];
 
