@@ -1,15 +1,14 @@
 <template>
   <div class="q-pa-md">
-    <q-list bordered separator>
-      <q-item clickable v-ripple @click="newCharacter">
-        <q-item-section>
-            <q-item-label>Create a new character</q-item-label>
-        </q-item-section>
-      </q-item>
-
+    <q-list
+      v-if="characters !== null && characters.length > 0"
+      bordered
+      separator
+    >
       <q-item
-        v-for="char in characters"
+        v-for="(char, index) in characters"
         v-bind:key="char.id"
+        @click="characterDetails(index)"
         clickable
         v-ripple
       >
@@ -19,66 +18,28 @@
       </q-item>
     </q-list>
 
-    <div style="display: none">
-      <q-select v-model="dice" :options="dices" label="Dice" emit-value />
-
-      <q-btn color="primary" label="Roll" @click="roll" />
-
-      <pre>{{ face }}</pre>
-    </div>
+    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+      <q-btn fab icon="add" color="primary" @click="newCharacter" />
+    </q-page-sticky>
   </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapMutations } from "vuex";
 
 export default {
-  data: () => {
-    return {
-      dices: [
-        {
-          label: 'D4',
-          value: 4,
-        },
-        {
-          label: 'D6',
-          value: 6,
-        },
-        {
-          label: 'D8',
-          value: 8,
-        },
-        {
-          label: 'D10',
-          value: 10,
-        },
-        {
-          label: 'D12',
-          value: 12,
-        },
-      ],
-    };
-  },
   computed: {
-    dice: {
-      get() {
-        return this.$store.state.dice;
-      },
-      set(val) {
-        this.$store.commit('selectDice', val);
-      },
-    },
-    face() {
-      return this.$store.state.face;
-    },
     characters() {
-      return this.$store.state.characters;
+      return this.$store.state.characterSheets.list();
     },
   },
   methods: {
-    ...mapMutations(['roll', 'selectDice']),
+    ...mapMutations(["roll", "selectDice"]),
     newCharacter() {
-      this.$router.push('/new-character');
+      this.$router.push("/new-character");
+    },
+    characterDetails(id) {
+      this.$router.push({ path: "/characters/" + id });
     },
   },
 };

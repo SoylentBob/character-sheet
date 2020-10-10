@@ -5,6 +5,12 @@
     </div>
     <div v-else>
       {{ character.name }}
+
+      <a
+        :href="'data:application/octet-stream;base64,' + characterExport"
+        download="character.json"
+        >Export</a
+      >
     </div>
   </div>
 </template>
@@ -15,19 +21,11 @@ export default {
     id() {
       return this.$route.params.id;
     },
-    characters() {
-      return this.$store.state.characters == null
-        ? []
-        : this.$store.state.characters;
-    },
     character() {
-      const matchingCharacters = this.characters.filter((v) => v.id === this.id);
-
-      if (matchingCharacters.length === 0) {
-        return null;
-      } else {
-        return matchingCharacters[0];
-      }
+      return this.$store.state.characterSheets.findById(this.id);
+    },
+    characterExport() {
+      return btoa(JSON.stringify(this.character));
     },
   },
 };

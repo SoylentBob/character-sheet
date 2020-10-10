@@ -9,7 +9,7 @@
       >
         Describe your characters background.
 
-        <q-input v-model="text" label="Name" />
+        <q-input v-model="characterSheet.name" label="Name" />
         <q-input v-model="text" label="Hometown" />
         <q-input type="number" v-model="text" label="Age" />
         <q-input v-model="text" label="Occupation" />
@@ -23,22 +23,35 @@
 
       <q-step
         :name="2"
-        :title="'Spend your talent points (' + usedTalentPoints + '/' + availableTalentPoints + ')'"
+        title="Spend your talent points"
         icon="assignment"
         :done="step > 2"
       >
         <div class="q-pa-lg">
-          <div v-for="talent in talents" v-bind:key="talent.value">
+          <UsedTalentPoints
+            :usedTalentPoints="usedTalentPoints"
+            :totalTalentPoints="characterSheet.totalTalentPoints"
+            style="margin-bottom: 20px"
+          ></UsedTalentPoints>
+
+          <div
+            v-for="talent in characterSheet.talents"
+            v-bind:key="talent.talent.value"
+          >
             <TalentLevelSelect
               :talent="talent"
-              :level="4"
               style="margin-bottom: 20px"
             ></TalentLevelSelect>
           </div>
+
+          <UsedTalentPoints
+            :usedTalentPoints="usedTalentPoints"
+            :totalTalentPoints="characterSheet.totalTalentPoints"
+          ></UsedTalentPoints>
         </div>
 
         <q-stepper-navigation>
-          <q-btn @click="step = 4" color="primary" label="Continue" />
+          <q-btn @click="step = 3" color="primary" label="Continue" />
           <q-btn
             flat
             @click="step = 1"
@@ -56,7 +69,7 @@
         running and how to resolve approval issues.
 
         <q-stepper-navigation>
-          <q-btn color="primary" label="Finish" />
+          <q-btn color="primary" label="Finish" @click="createCharacter" />
           <q-btn
             flat
             @click="step = 2"
@@ -71,19 +84,31 @@
 </template>
 
 <script>
-import TalentLevelSelect from '@/components/TalentLevelSelect.vue';
+import TalentLevelSelect from "@/components/TalentLevelSelect.vue";
+import UsedTalentPoints from "@/components/UsedTalentPoints.vue";
 
 export default {
   data() {
     return {
       step: 1,
-      availableTalentPoints: 12,
-      usedTalentPoints: 0,
       talents: this.$store.state.talents,
+      characterSheet: this.$store.state.newCharacterSheet,
     };
+  },
+  computed: {
+    usedTalentPoints() {
+      return this.characterSheet.usedTalentPoints();
+    },
   },
   components: {
     TalentLevelSelect,
+    UsedTalentPoints,
+  },
+  methods: {
+    createCharacter() {
+      this.$store.state.characterSheets.add(this.characterSheet);
+      this.$router.push("/characters");
+    },
   },
 };
 </script>
