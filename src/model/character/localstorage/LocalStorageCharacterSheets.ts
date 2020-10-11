@@ -6,8 +6,10 @@ class LocalStorageCharacterSheets implements CharacterSheets {
     private readonly localStorage = localStorage;
 
     list(): CharacterSheet[] {
-        if(this.localStorage.getItem('characters')) {
-            return JSON.parse(this.localStorage.getItem('characters'));
+        const characters = this.localStorage.getItem('characters');
+
+        if(characters) {
+            return JSON.parse(characters);
         }
 
         return [];

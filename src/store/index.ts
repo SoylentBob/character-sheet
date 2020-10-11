@@ -11,7 +11,6 @@ export default new Vuex.Store({
   state: {
     face: 1,
     dice: 6,
-    characters: JSON.parse(localStorage.getItem('characters')),
     newCharacterSheet: new CharacterSheet(
       "",
       talents.map(v => new CharacterTalent(v, 4)),
